@@ -184,7 +184,10 @@ QUIZZES = {
 # FOYDALANUVCHI NATIJASI
 # ==================================================
 
-user_data = {}class AddQuestion(StatesGroup):
+user_data = {}
+
+
+class AddQuestion(StatesGroup):
     subject = State()
     question = State()
     answer_a = State()
