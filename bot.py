@@ -196,13 +196,26 @@ class AddQuestion(StatesGroup):
     correct = State()
     @dp.message(Command("admin"))
 @dp.message(Command("admin"))
-async def admin_panel(message: Message):if message.from_user.id != ADMIN_ID:
+    ADMIN_ID = 6707551846
+
+
+@dp.message(Command("admin"))
+async def admin_panel(message: Message):
+
+    if message.from_user.id != ADMIN_ID:
         await message.answer("⛔ Sizda admin huquqi yo‘q.")
-        return keyboard = InlineKeyboardBuilder()
-        keyboard.button(
+        return
+
+    keyboard = InlineKeyboardBuilder()
+
+    keyboard.button(
         text="➕ Savol qo‘shish",
-            callback_data="admin_add"keyboard.adjust(1)
-            await message.answer(
+        callback_data="admin_add"
+    )
+
+    keyboard.adjust(1)
+
+    await message.answer(
         "⚙️ <b>SINOVIX ADMIN PANEL</b>\n\n"
         "Kerakli bo‘limni tanlang:",
         reply_markup=keyboard.as_markup(),
