@@ -343,6 +343,46 @@ async def get_answer_d(message: Message, state: FSMContext):
         reply_markup=keyboard.as_markup(),
         parse_mode="HTML"
     )
+    @dp.callback_query(F.data.startswith("correct_"))
+async def save_question(callback: CallbackQuery, state: FSMContext):
+
+    if callback.from_user.id != ADMIN_ID:
+        await callback.answer("⛔ Ruxsat yo‘q.", show_alert=True)
+        return
+
+    data = await state.get_data()
+
+    subject = data["subject"]
+
+    correct_letter = callback.data.replace("correct_", "")
+    correct_index = ord(correct_letter) - 65
+
+    new_question = {
+        "question": data["question"],
+        "answers": [
+            data["answer_a"],
+            data["answer_b"],
+            data["answer_c"],
+            data["answer_d"]
+        ],
+        "correct": correct_index
+    }
+
+    QUIZZES.setdefault(subject, []).append(new_question)
+
+    await state.clear()
+
+    await callback.message.edit_text(
+        f"✅ <b>SAVOL SAQLANDI!</b>\n\n"
+        f"📚 Fan: {subject}\n"
+        f"❓ {data['question']}\n\n"
+        f"🟢 To‘g‘ri javob: {correct_letter}\n\n"
+        f"📊 Bu fan bo‘yicha savollar soni: "
+        f"{len(QUIZZES[subject])} ta",
+        parse_mode="HTML"
+    )
+
+    await callback.answer()
 # ==================================================
 # TELEGRAM ID
 # ==================================================
