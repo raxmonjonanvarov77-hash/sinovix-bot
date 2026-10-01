@@ -209,8 +209,9 @@ async def start(message: Message):
     await message.answer(
         "👋 <b>SINOVIX</b> botiga xush kelibsiz!\n\n"
         "📚 Bilimingizni sinang va natijangizni tekshiring.",
-        reply_markup=keyboard.as_markup()
-    )
+        reply_markup=keyboard.as_markup(), 
+        parse_mode="HTML"
+    )   
 
 
 # ==================================================
@@ -246,7 +247,8 @@ async def subjects(callback: CallbackQuery):
 
     await callback.message.edit_text(
         "📚 <b>Fanni tanlang:</b>",
-        reply_markup=keyboard.as_markup()
+        reply_markup=keyboard.as_markup(),
+        parse_mode="HTML"
     )
 
     await callback.answer()
@@ -318,7 +320,8 @@ async def send_question(message: Message, user_id: int):
 
         f"{question['question']}",
 
-        reply_markup=keyboard.as_markup()
+        reply_markup=keyboard.as_markup(),
+        parse_mode="HTML"
     )
 
 
@@ -419,7 +422,8 @@ async def show_result(message: Message, user_id: int):
 
         "SINOVIX bilan yana mashq qiling! 🚀",
 
-        reply_markup=keyboard.as_markup()
+        reply_markup=keyboard.as_markup(),
+        parse_mode="HTML"
     )
 
 
