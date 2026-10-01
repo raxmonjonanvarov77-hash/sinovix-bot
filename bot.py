@@ -2,6 +2,7 @@
 import asyncio
 import logging
 import os
+import psycopg2
 
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command
@@ -16,6 +17,7 @@ from aiogram.fsm.context import FSMContext
 # ==================================================
 
 TOKEN = os.getenv("BOT_TOKEN")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 ADMIN_ID = 6707551846
 
