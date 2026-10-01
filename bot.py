@@ -232,6 +232,29 @@ async def my_id(message: Message):
         f"🆔 Sizning Telegram ID: <code>{message.from_user.id}</code>",
         parse_mode="HTML"
     )
+    @dp.callback_query(F.data == "admin_add")
+async def admin_add_start(callback: CallbackQuery, state: FSMContext):
+
+    if callback.from_user.id != ADMIN_ID:
+        await callback.answer("⛔ Ruxsat yo‘q.", show_alert=True)
+        return
+
+    keyboard = InlineKeyboardBuilder()
+
+    keyboard.button(text="🇬🇧 IELTS", callback_data="add_IELTS")
+    keyboard.button(text="📘 CEFR", callback_data="add_CEFR")
+    keyboard.button(text="🇺🇿 Ona tili", callback_data="add_ONA_TILI")
+    keyboard.button(text="📐 Matematika", callback_data="add_MATEMATIKA")
+
+    keyboard.adjust(2)
+
+    await callback.message.edit_text(
+        "📚 <b>Qaysi fanga savol qo‘shamiz?</b>",
+        reply_markup=keyboard.as_markup(),
+        parse_mode="HTML"
+    )
+
+    await callback.answer()
 
 
 # ==================================================
