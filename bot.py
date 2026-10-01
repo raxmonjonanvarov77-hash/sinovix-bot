@@ -21,6 +21,32 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 
 ADMIN_ID = 6707551846
 
+def init_db():
+
+    conn = psycopg2.connect(DATABASE_URL)
+
+    cur = conn.cursor()
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS questions (
+            id SERIAL PRIMARY KEY,
+            subject TEXT NOT NULL,
+            question TEXT NOT NULL,
+            answer_a TEXT NOT NULL,
+            answer_b TEXT NOT NULL,
+            answer_c TEXT NOT NULL,
+            answer_d TEXT NOT NULL,
+            correct INTEGER NOT NULL
+        )
+    """)
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    print("Database tayyor!")
+
 if not TOKEN:
     raise ValueError("BOT_TOKEN topilmadi!")
 
@@ -805,6 +831,7 @@ async def main():
     logging.basicConfig(
         level=logging.INFO
     )
+    init_db()
 
     print("SINOVIX bot ishga tushdi!")
 
