@@ -259,7 +259,90 @@ async def admin_add_start(callback: CallbackQuery, state: FSMContext):
     )
 
     await callback.answer()
-    
+
+@dp.callback_query(F.data.startswith("add_"))
+async def choose_add_subject(callback: CallbackQuery, state: FSMContext):
+
+    if callback.from_user.id != ADMIN_ID:
+        await callback.answer("⛔ Ruxsat yo‘q.", show_alert=True)
+        return
+
+    subject = callback.data.replace("add_", "")
+
+    if subject == "ONA_TILI":
+        subject = "ONA TILI"
+
+    await state.update_data(subject=subject)
+    await state.set_state(AddQuestion.question)
+
+    await callback.message.answer(
+        f"📚 Fan: <b>{subject}</b>\n\n"
+        "❓ Savolni yozing:",
+        parse_mode="HTML"
+    )
+
+    await callback.answer()
+
+
+@dp.message(AddQuestion.question)
+async def get_question(message: Message, state: FSMContext):
+
+    if message.from_user.id != ADMIN_ID:
+        return
+
+    await state.update_data(question=message.text)
+    await state.set_state(AddQuestion.answer_a)
+
+    await message.answer("🅰️ A javobni yozing:")
+
+
+@dp.message(AddQuestion.answer_a)
+async def get_answer_a(message: Message, state: FSMContext):
+
+    await state.update_data(answer_a=message.text)
+    await state.set_state(AddQuestion.answer_b)
+
+    await message.answer("🅱️ B javobni yozing:")
+
+
+@dp.message(AddQuestion.answer_b)
+async def get_answer_b(message: Message, state: FSMContext):
+
+    await state.update_data(answer_b=message.text)
+    await state.set_state(AddQuestion.answer_c)
+
+    await message.answer("©️ C javobni yozing:")
+
+
+@dp.message(AddQuestion.answer_c)
+async def get_answer_c(message: Message, state: FSMContext):
+
+    await state.update_data(answer_c=message.text)
+    await state.set_state(AddQuestion.answer_d)
+
+    await message.answer("🅳 D javobni yozing:")
+
+
+@dp.message(AddQuestion.answer_d)
+async def get_answer_d(message: Message, state: FSMContext):
+
+    await state.update_data(answer_d=message.text)
+    await state.set_state(AddQuestion.correct)
+
+    keyboard = InlineKeyboardBuilder()
+
+    keyboard.button(text="🅰️ A", callback_data="correct_A")
+    keyboard.button(text="🅱️ B", callback_data="correct_B")
+    keyboard.button(text="©️ C", callback_data="correct_C")
+    keyboard.button(text="🅳 D", callback_data="correct_D")
+
+    keyboard.adjust(2)
+
+    await message.answer(
+        "✅ Qaysi javob <b>to‘g‘ri</b>?",
+        reply_markup=keyboard.as_markup(),
+        parse_mode="HTML"
+    )
 # ==================================================
 # TELEGRAM ID
 # ==================================================
