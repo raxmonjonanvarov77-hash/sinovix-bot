@@ -7,6 +7,8 @@ from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command
 from aiogram.types import Message, CallbackQuery
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.fsm.state import State, StatesGroup
+from aiogram.fsm.context import FSMContext
 
 
 # ==================================================
@@ -183,6 +185,37 @@ QUIZZES = {
 # ==================================================
 
 user_data = {}
+ADMIN_ID = 6707551846
+class AddQuestion(StatesGroup):
+    subject = State()
+    question = State()
+    answer_a = State()
+    answer_b = State()
+    answer_c = State()
+    answer_d = State()
+    correct = State()
+    @dp.message(Command("admin"))
+async def admin_panel(message: Message):
+
+    if message.from_user.id != ADMIN_ID:
+        await message.answer("⛔ Sizda admin huquqi yo‘q.")
+        return
+
+    keyboard = InlineKeyboardBuilder()
+
+    keyboard.button(
+        text="➕ Savol qo‘shish",
+        callback_data="admin_add"
+    )
+
+    keyboard.adjust(1)
+
+    await message.answer(
+        "⚙️ <b>SINOVIX ADMIN PANEL</b>\n\n"
+        "Kerakli bo‘limni tanlang:",
+        reply_markup=keyboard.as_markup(),
+        parse_mode="HTML"
+    )
 # ==================================================
 # TELEGRAM ID
 # ==================================================
