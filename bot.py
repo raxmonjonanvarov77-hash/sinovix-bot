@@ -17,6 +17,8 @@ from aiogram.fsm.context import FSMContext
 
 TOKEN = os.getenv("BOT_TOKEN")
 
+ADMIN_ID = 6707551846
+
 if not TOKEN:
     raise ValueError("BOT_TOKEN topilmadi!")
 
