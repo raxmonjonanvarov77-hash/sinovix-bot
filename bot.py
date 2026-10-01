@@ -183,6 +183,16 @@ QUIZZES = {
 # ==================================================
 
 user_data = {}
+# ==================================================
+# TELEGRAM ID
+# ==================================================
+
+@dp.message(Command("myid"))
+async def my_id(message: Message):
+    await message.answer(
+        f"🆔 Sizning Telegram ID: <code>{message.from_user.id}</code>",
+        parse_mode="HTML"
+    )
 
 
 # ==================================================
