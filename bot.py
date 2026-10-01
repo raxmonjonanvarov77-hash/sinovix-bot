@@ -199,6 +199,10 @@ class AddQuestion(StatesGroup):
     correct = State()
 
 
+# ==================================================
+# ADMIN PANEL
+# ==================================================
+
 @dp.message(Command("admin"))
 async def admin_panel(message: Message):
 
@@ -221,11 +225,20 @@ async def admin_panel(message: Message):
         reply_markup=keyboard.as_markup(),
         parse_mode="HTML"
     )
+
+
+# ==================================================
+# SAVOL QO‘SHISHNI BOSHLASH
+# ==================================================
+
 @dp.callback_query(F.data == "admin_add")
 async def admin_add_start(callback: CallbackQuery, state: FSMContext):
 
     if callback.from_user.id != ADMIN_ID:
-        await callback.answer("⛔ Ruxsat yo‘q.", show_alert=True)
+        await callback.answer(
+            "⛔ Ruxsat yo‘q.",
+            show_alert=True
+        )
         return
 
     keyboard = InlineKeyboardBuilder()
@@ -260,11 +273,22 @@ async def admin_add_start(callback: CallbackQuery, state: FSMContext):
 
     await callback.answer()
 
+
+# ==================================================
+# FAN TANLASH
+# ==================================================
+
 @dp.callback_query(F.data.startswith("add_"))
-async def choose_add_subject(callback: CallbackQuery, state: FSMContext):
+async def choose_add_subject(
+    callback: CallbackQuery,
+    state: FSMContext
+):
 
     if callback.from_user.id != ADMIN_ID:
-        await callback.answer("⛔ Ruxsat yo‘q.", show_alert=True)
+        await callback.answer(
+            "⛔ Ruxsat yo‘q.",
+            show_alert=True
+        )
         return
 
     subject = callback.data.replace("add_", "")
@@ -272,8 +296,13 @@ async def choose_add_subject(callback: CallbackQuery, state: FSMContext):
     if subject == "ONA_TILI":
         subject = "ONA TILI"
 
-    await state.update_data(subject=subject)
-    await state.set_state(AddQuestion.question)
+    await state.update_data(
+        subject=subject
+    )
+
+    await state.set_state(
+        AddQuestion.question
+    )
 
     await callback.message.answer(
         f"📚 Fan: <b>{subject}</b>\n\n"
@@ -284,54 +313,152 @@ async def choose_add_subject(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
 
 
+# ==================================================
+# SAVOL
+# ==================================================
+
+@dp.message(AddQuestion.question)
+async def get_question(
+    message: Message,
+    state: FSMContext
+):
+
     if message.from_user.id != ADMIN_ID:
         return
 
-    await state.update_data(question=message.text)
-    await state.set_state(AddQuestion.answer_a)
+    await state.update_data(
+        question=message.text
+    )
 
-    await message.answer("🅰️ A javobni yozing:")
+    await state.set_state(
+        AddQuestion.answer_a
+    )
 
+    await message.answer(
+        "🅰️ A javobni yozing:"
+    )
+
+
+# ==================================================
+# A JAVOB
+# ==================================================
 
 @dp.message(AddQuestion.answer_a)
-async def get_answer_a(message: Message, state: FSMContext):
+async def get_answer_a(
+    message: Message,
+    state: FSMContext
+):
 
-    await state.update_data(answer_a=message.text)
-    await state.set_state(AddQuestion.answer_b)
+    if message.from_user.id != ADMIN_ID:
+        return
 
-    await message.answer("🅱️ B javobni yozing:")
+    await state.update_data(
+        answer_a=message.text
+    )
 
+    await state.set_state(
+        AddQuestion.answer_b
+    )
+
+    await message.answer(
+        "🅱️ B javobni yozing:"
+    )
+
+
+# ==================================================
+# B JAVOB
+# ==================================================
 
 @dp.message(AddQuestion.answer_b)
-async def get_answer_b(message: Message, state: FSMContext):
+async def get_answer_b(
+    message: Message,
+    state: FSMContext
+):
 
-    await state.update_data(answer_b=message.text)
-    await state.set_state(AddQuestion.answer_c)
+    if message.from_user.id != ADMIN_ID:
+        return
 
-    await message.answer("©️ C javobni yozing:")
+    await state.update_data(
+        answer_b=message.text
+    )
 
+    await state.set_state(
+        AddQuestion.answer_c
+    )
+
+    await message.answer(
+        "©️ C javobni yozing:"
+    )
+
+
+# ==================================================
+# C JAVOB
+# ==================================================
 
 @dp.message(AddQuestion.answer_c)
-async def get_answer_c(message: Message, state: FSMContext):
+async def get_answer_c(
+    message: Message,
+    state: FSMContext
+):
 
-    await state.update_data(answer_c=message.text)
-    await state.set_state(AddQuestion.answer_d)
+    if message.from_user.id != ADMIN_ID:
+        return
 
-    await message.answer("🅳 D javobni yozing:")
+    await state.update_data(
+        answer_c=message.text
+    )
 
+    await state.set_state(
+        AddQuestion.answer_d
+    )
+
+    await message.answer(
+        "🅳 D javobni yozing:"
+    )
+
+
+# ==================================================
+# D JAVOB
+# ==================================================
 
 @dp.message(AddQuestion.answer_d)
-async def get_answer_d(message: Message, state: FSMContext):
+async def get_answer_d(
+    message: Message,
+    state: FSMContext
+):
 
-    await state.update_data(answer_d=message.text)
-    await state.set_state(AddQuestion.correct)
+    if message.from_user.id != ADMIN_ID:
+        return
+
+    await state.update_data(
+        answer_d=message.text
+    )
+
+    await state.set_state(
+        AddQuestion.correct
+    )
 
     keyboard = InlineKeyboardBuilder()
 
-    keyboard.button(text="🅰️ A", callback_data="correct_A")
-    keyboard.button(text="🅱️ B", callback_data="correct_B")
-    keyboard.button(text="©️ C", callback_data="correct_C")
-    keyboard.button(text="🅳 D", callback_data="correct_D")
+    keyboard.button(
+        text="🅰️ A",
+        callback_data="correct_A"
+    )
+
+    keyboard.button(
+        text="🅱️ B",
+        callback_data="correct_B"
+    )
+
+    keyboard.button(
+        text="©️ C",
+        callback_data="correct_C"
+    )
+
+    keyboard.button(
+        text="🅳 D",
+        callback_data="correct_D"
+    )
 
     keyboard.adjust(2)
 
@@ -340,35 +467,51 @@ async def get_answer_d(message: Message, state: FSMContext):
         reply_markup=keyboard.as_markup(),
         parse_mode="HTML"
     )
-    
-    @dp.callback_query(F.data.startswith("correct_"))
-    async def save_question(callback: CallbackQuery, state: FSMContext):
+
+
+# ==================================================
+# SAVOLNI SAQLASH
+# ==================================================
+
+@dp.callback_query(F.data.startswith("correct_"))
+async def save_question(
+    callback: CallbackQuery,
+    state: FSMContext
+):
 
     if callback.from_user.id != ADMIN_ID:
-        await callback.answer("⛔ Ruxsat yo‘q.", show_alert=True)
+        await callback.answer(
+            "⛔ Ruxsat yo‘q.",
+            show_alert=True
+        )
         return
 
     data = await state.get_data()
 
     subject = data["subject"]
 
-    correct_letter = callback.data.replace("correct_", "")
+    correct_letter = callback.data.replace(
+        "correct_",
+        ""
+    )
+
     correct_index = ord(correct_letter) - 65
 
     new_question = {
-    "question": data["question"],
-    "answers": [
-        data["answer_a"],
-        data["answer_b"],
-        data["answer_c"],
-        data["answer_d"]
-    ],
-    "correct": correct_index
-}
-            
-        "correct": correct_index}
+        "question": data["question"],
+        "answers": [
+            data["answer_a"],
+            data["answer_b"],
+            data["answer_c"],
+            data["answer_d"]
+        ],
+        "correct": correct_index
+    }
 
-    QUIZZES.setdefault(subject, []).append(new_question)
+    QUIZZES.setdefault(
+        subject,
+        []
+    ).append(new_question)
 
     await state.clear()
 
@@ -383,49 +526,6 @@ async def get_answer_d(message: Message, state: FSMContext):
     )
 
     await callback.answer()
-# ==================================================
-# TELEGRAM ID
-# ==================================================
-
-@dp.callback_query(F.data == "admin_add")
-async def admin_add_start(callback: CallbackQuery, state: FSMContext):
-
-    if callback.from_user.id != ADMIN_ID:
-        await callback.answer("⛔ Ruxsat yo‘q.", show_alert=True)
-        return
-
-    keyboard = InlineKeyboardBuilder()
-
-    keyboard.button(
-        text="🇬🇧 IELTS",
-        callback_data="add_IELTS"
-    )
-
-    keyboard.button(
-        text="📘 CEFR",
-        callback_data="add_CEFR"
-    )
-
-    keyboard.button(
-        text="🇺🇿 Ona tili",
-        callback_data="add_ONA_TILI"
-    )
-
-    keyboard.button(
-        text="📐 Matematika",
-        callback_data="add_MATEMATIKA"
-    )
-
-    keyboard.adjust(2)
-
-    await callback.message.edit_text(
-        "📚 <b>Qaysi fanga savol qo‘shamiz?</b>",
-        reply_markup=keyboard.as_markup(),
-        parse_mode="HTML"
-    )
-
-    await callback.answer()
-
 # ==================================================
 # /START
 # ==================================================
