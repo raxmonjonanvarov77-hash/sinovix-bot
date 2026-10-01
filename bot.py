@@ -356,14 +356,14 @@ async def get_answer_d(message: Message, state: FSMContext):
     correct_index = ord(correct_letter) - 65
 
     new_question = {
-        "question": data["question"],
-        "answers": [
-    data["answer_a"],
-    data["answer_b"],
-    data["answer_c"],
-    data["answer_d"]
-],
-"correct": correct_index
+    "question": data["question"],
+    "answers": [
+        data["answer_a"],
+        data["answer_b"],
+        data["answer_c"],
+        data["answer_d"]
+    ],
+    "correct": correct_index
 }
             
         "correct": correct_index}
