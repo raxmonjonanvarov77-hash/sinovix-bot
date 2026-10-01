@@ -284,9 +284,6 @@ async def choose_add_subject(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
 
 
-@dp.message(AddQuestion.question)
-async def get_question(message: Message, state: FSMContext):
-
     if message.from_user.id != ADMIN_ID:
         return
 
@@ -361,10 +358,13 @@ async def get_answer_d(message: Message, state: FSMContext):
     new_question = {
         "question": data["question"],
         "answers": [
-            data["answer_a"],
-            data["answer_b"],
-            data["answer_c"],
-            data["answer_d"], 
+    data["answer_a"],
+    data["answer_b"],
+    data["answer_c"],
+    data["answer_d"]
+],
+"correct": correct_index
+}
             
         "correct": correct_index}
 
