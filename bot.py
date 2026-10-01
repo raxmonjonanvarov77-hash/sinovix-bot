@@ -343,8 +343,9 @@ async def get_answer_d(message: Message, state: FSMContext):
         reply_markup=keyboard.as_markup(),
         parse_mode="HTML"
     )
+    
     @dp.callback_query(F.data.startswith("correct_"))
-async def save_question(callback: CallbackQuery, state: FSMContext):
+    async def save_question(callback: CallbackQuery, state: FSMContext):
 
     if callback.from_user.id != ADMIN_ID:
         await callback.answer("⛔ Ruxsat yo‘q.", show_alert=True)
