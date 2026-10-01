@@ -501,7 +501,7 @@ async def get_answer_d(
 # SAVOLNI SAQLASH
 # ==================================================
 
-    @dp.callback_query(F.data.startswith("correct_"))
+@dp.callback_query(F.data.startswith("correct_"))
 async def save_question(
     callback: CallbackQuery,
     state: FSMContext
