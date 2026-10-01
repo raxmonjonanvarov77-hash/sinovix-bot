@@ -46,6 +46,50 @@ def init_db():
     conn.close()
 
     print("Database tayyor!")
+    def load_questions():
+
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT
+            subject,
+            question,
+            answer_a,
+            answer_b,
+            answer_c,
+            answer_d,
+            correct
+        FROM questions
+        ORDER BY id
+    """)
+
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    for row in rows:
+
+        subject = row[0]
+
+        question = {
+            "question": row[1],
+            "answers": [
+                row[2],
+                row[3],
+                row[4],
+                row[5]
+            ],
+            "correct": row[6]
+        }
+
+        QUIZZES.setdefault(
+            subject,
+            []
+        ).append(question)
+
+    print(f"Database'dan {len(rows)} ta savol yuklandi!")
 
 if not TOKEN:
     raise ValueError("BOT_TOKEN topilmadi!")
@@ -866,6 +910,7 @@ async def main():
         level=logging.INFO
     )
     init_db()
+    load_questions()
 
     print("SINOVIX bot ishga tushdi!")
 
