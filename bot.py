@@ -501,7 +501,7 @@ async def get_answer_d(
 # SAVOLNI SAQLASH
 # ==================================================
 
-@dp.callback_query(F.data.startswith("correct_"))
+    @dp.callback_query(F.data.startswith("correct_"))
 async def save_question(
     callback: CallbackQuery,
     state: FSMContext
@@ -525,6 +525,41 @@ async def save_question(
 
     correct_index = ord(correct_letter) - 65
 
+    # PostgreSQL ga saqlash
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute(
+        """
+        INSERT INTO questions
+        (
+            subject,
+            question,
+            answer_a,
+            answer_b,
+            answer_c,
+            answer_d,
+            correct
+        )
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """,
+        (
+            subject,
+            data["question"],
+            data["answer_a"],
+            data["answer_b"],
+            data["answer_c"],
+            data["answer_d"],
+            correct_index
+        )
+    )
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    # Bot ishlashi uchun vaqtinchalik xotiraga ham qo‘shamiz
     new_question = {
         "question": data["question"],
         "answers": [
@@ -548,8 +583,7 @@ async def save_question(
         f"📚 Fan: {subject}\n"
         f"❓ {data['question']}\n\n"
         f"🟢 To‘g‘ri javob: {correct_letter}\n\n"
-        f"📊 Bu fan bo‘yicha savollar soni: "
-        f"{len(QUIZZES[subject])} ta",
+        "💾 Savol database'ga saqlandi!",
         parse_mode="HTML"
     )
 
