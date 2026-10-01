@@ -364,10 +364,9 @@ async def get_answer_d(message: Message, state: FSMContext):
             data["answer_a"],
             data["answer_b"],
             data["answer_c"],
-            data["answer_d"]
-        ],
-        "correct": correct_index
-    }
+            data["answer_d"], 
+            
+        "correct": correct_index}
 
     QUIZZES.setdefault(subject, []).append(new_question)
 
