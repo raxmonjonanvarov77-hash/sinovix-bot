@@ -184,9 +184,7 @@ QUIZZES = {
 # FOYDALANUVCHI NATIJASI
 # ==================================================
 
-user_data = {}
-ADMIN_ID = 6707551846
-class AddQuestion(StatesGroup):
+user_data = {}class AddQuestion(StatesGroup):
     subject = State()
     question = State()
     answer_a = State()
@@ -194,9 +192,6 @@ class AddQuestion(StatesGroup):
     answer_c = State()
     answer_d = State()
     correct = State()
-    @dp.message(Command("admin"))
-@dp.message(Command("admin"))
-    ADMIN_ID = 6707551846
 
 
 @dp.message(Command("admin"))
@@ -221,6 +216,7 @@ async def admin_panel(message: Message):
         reply_markup=keyboard.as_markup(),
         parse_mode="HTML"
     )
+
 # ==================================================
 # TELEGRAM ID
 # ==================================================
