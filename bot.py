@@ -195,6 +195,7 @@ class AddQuestion(StatesGroup):
     answer_d = State()
     correct = State()
     @dp.message(Command("admin"))
+@dp.message(Command("admin"))
 async def admin_panel(message: Message):
 
     if message.from_user.id != ADMIN_ID:
